@@ -9,7 +9,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/home')
 def serve_frontend():
     return send_from_directory('static', 'index.html')
 
