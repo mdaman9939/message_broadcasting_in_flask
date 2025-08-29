@@ -4,10 +4,13 @@ from email.mime.text import MIMEText
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request, send_from_directory
+from flask_cors import CORS
 
 load_dotenv()
 
 app = Flask(__name__)
+
+CORS(app)
 
 @app.route('/home')
 def serve_frontend():
