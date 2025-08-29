@@ -45,4 +45,5 @@ def message_broadcasting_in_flask():
         return jsonify({"status": "error", "message": str(e)}), 500
     
 if __name__ == '__main__':
-    print("This app is not meant to be run directly. Use gunicorn.")
+    port = int(os.environ.get('PORT', 5000)) # Use PORT environment variable if available
+    app.run(host='0.0.0.0', port=port)
