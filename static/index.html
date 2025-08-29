@@ -72,7 +72,7 @@
       const recipients = document.getElementById('recipients').value.split(',').map(email => email.trim());
 
       try {
-        const res = await fetch('https://web-production-705f2.up.railway.app/send-email', {
+        const res = await fetch('https://web-production-705f2.up.railway.app/message_broadcasting_in_flask', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
