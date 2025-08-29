@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <title>Email Broadcaster — Modern UI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-r from-blue-400 to-indigo-600 min-h-screen flex items-center justify-center p-6">
+
+  <div class="bg-white rounded-xl shadow-lg max-w-lg w-full p-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6 text-center">Broadcast Email</h1>
+    <form id="emailForm" class="space-y-6">
+
+      <div>
+        <label for="subject" class="block mb-2 text-sm font-medium text-gray-700">Subject</label>
+        <input
+          type="text"
+          id="subject"
+          required
+          class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder="Enter email subject"
+        />
+      </div>
+
+      <div>
+        <label for="recipients" class="block mb-2 text-sm font-medium text-gray-700">
+          Recipients (comma separated)
+        </label>
+        <input
+          type="text"
+          id="recipients"
+          required
+          class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder="example1@mail.com, example2@mail.com"
+        />
+      </div>
+
+      <div>
+        <label for="html" class="block mb-2 text-sm font-medium text-gray-700">HTML Message</label>
+        <textarea
+          id="html"
+          rows="5"
+          required
+          class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder="Write your HTML message here..."
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-indigo-600 text-white font-semibold py-3 rounded-md hover:bg-indigo-700 transition-colors"
+      >
+        Send Email
+      </button>
+
+      <div id="response" class="text-center mt-4 text-lg"></div>
+
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('emailForm');
+    const responseBox = document.getElementById('response');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      responseBox.textContent = '';
+      responseBox.className = '';
+
+      const subject = document.getElementById('subject').value;
+      const html = document.getElementById('html').value;
+      const recipients = document.getElementById('recipients').value.split(',').map(email => email.trim());
+
+      try {
+        const res = await fetch('https://web-production-705f2.up.railway.app/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ subject, html, recipients })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          responseBox.textContent = '✅ Emails sent successfully!';
+          responseBox.className = 'text-green-600 font-semibold';
+          form.reset();
+        } else {
+          responseBox.textContent = `❌ Error: ${data.message}`;
+          responseBox.className = 'text-red-600 font-semibold';
+        }
+      } catch (err) {
+        responseBox.textContent = '❌ Failed to connect to API.';
+        responseBox.className = 'text-red-600 font-semibold';
+      }
+    });
+  </script>
+</body>
+</html>

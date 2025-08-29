@@ -3,11 +3,15 @@ import smtplib
 from email.mime.text import MIMEText
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 
 load_dotenv()
 
 app = Flask(__name__)
+
+@app.route('/')
+def serve_frontend():
+    return send_from_directory('static', 'index.html')
 
 @app.route('/', methods=['GET'])
 def index():
